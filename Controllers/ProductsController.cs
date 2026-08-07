@@ -7,65 +7,56 @@ namespace AspNetCoreWebApiSandbox;
 public class ProductsController : ControllerBase
 {
 
-    private static List<Product> _products = new List<Product>
+    private readonly IProductRepository _repository;
+
+    public ProductsController(IProductRepository repository)
     {
-        new Product{Id=1, Name="Nokia",Price=100.2m},
-        new Product{Id=2,Name="Iphone", Price=23000m},
-        new Product{Id=3,Name="Nothing Phone", Price=40000m},
-    };
+        _repository = repository;
+    }
 
     [HttpGet]
     public IActionResult GetAllProducts()
     {
-        return Ok(_products);
+        return Ok(_repository.GetAll());
     }
 
     [HttpGet("{id}")]
     public IActionResult GetProductById(int id)
     {
-        var product = _products.FirstOrDefault(n => n.Id == id);
-        if (product == null)
-        {
-            return NotFound();
-        }
+        var product = _repository.GetById(id);
+        if (product == null) return NotFound();
         return Ok(product);
-
     }
 
     [HttpPost]
     public IActionResult CreateProduct([FromBody] Product newProduct)
     {
-        newProduct.Id = _products.Count + 1;
-        _products.Add(newProduct);
-
+        _repository.Add(newProduct);
         return CreatedAtAction(nameof(GetProductById), new { id = newProduct.Id }, newProduct);
     }
 
     [HttpPut("{id}")]
     public IActionResult UpdateProduct(int id, [FromBody] Product updatedProduct)
     {
-        var product = _products.FirstOrDefault(n => n.Id == id);
-        if (product == null)
+        bool status = _repository.Update(id, updatedProduct);
+        if (status == false)
         {
-            NotFound();
+            return NotFound();
         }
-
-        product.Name = updatedProduct.Name;
-        product.Price = updatedProduct.Price;
-
         return NoContent();
+
+
+
     }
 
     [HttpDelete("{id}")]
     public IActionResult Deleteproduct(int id)
     {
-        var product = _products.FirstOrDefault(p => p.Id == id);
-        if (product == null)
+        bool status = _repository.Delete(id);
+        if (status == false)
         {
             return NotFound();
         }
-        _products.Remove(product);
-
         return NoContent();
     }
 
