@@ -29,16 +29,27 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreateProduct([FromBody] Product newProduct)
+    public IActionResult CreateProduct([FromBody] CreateProductDto newProduct)
     {
-        _repository.Add(newProduct);
-        return CreatedAtAction(nameof(GetProductById), new { id = newProduct.Id }, newProduct);
+        var product = new Product
+        {
+            Name = newProduct.Name,
+            Price = newProduct.Price
+
+        };
+        _repository.Add(product);
+        return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, newProduct);
     }
 
     [HttpPut("{id}")]
-    public IActionResult UpdateProduct(int id, [FromBody] Product updatedProduct)
+    public IActionResult UpdateProduct(int id, [FromBody] UpdateProductDto updatedProduct)
     {
-        bool status = _repository.Update(id, updatedProduct);
+        var product = new Product
+        {
+            Name = updatedProduct.Name,
+            Price = updatedProduct.Price
+        };
+        bool status = _repository.Update(id, product);
         if (status == false)
         {
             return NotFound();
