@@ -17,7 +17,14 @@ public class ProductsController : ControllerBase
     [HttpGet]
     public IActionResult GetAllProducts()
     {
-        return Ok(_repository.GetAll());
+        var products = _repository.GetAll();
+        var responseData = products.Select(p => new ProductResponseDto
+        {
+            Name = p.Name,
+            Price = p.Price
+        }).ToList();
+
+        return Ok(responseData);
     }
 
     [HttpGet("{id}")]
@@ -25,7 +32,14 @@ public class ProductsController : ControllerBase
     {
         var product = _repository.GetById(id);
         if (product == null) return NotFound();
-        return Ok(product);
+
+        var responseData = new ProductResponseDto
+        {
+            Name = product.Name,
+            Price = product.Price
+        };
+
+        return Ok(responseData);
     }
 
     [HttpPost]
@@ -61,7 +75,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Deleteproduct(int id)
+    public IActionResult DeleteProduct(int id)
     {
         bool status = _repository.Delete(id);
         if (status == false)
