@@ -23,6 +23,7 @@ public class SqliteProductRepository : IProductRepository
 
     public void Add(Product newProduct)
     {
+        
         _context.Products.Add(newProduct);
         _context.SaveChanges();
     }
