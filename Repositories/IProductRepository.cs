@@ -7,4 +7,5 @@ public interface IProductRepository
     void Add(Product newProduct);
     bool Update(int id, Product updatedProduct);
     bool Delete(int id);
+    bool DeleteAll();
 }

@@ -23,7 +23,7 @@ public class SqliteProductRepository : IProductRepository
 
     public void Add(Product newProduct)
     {
-        
+
         _context.Products.Add(newProduct);
         _context.SaveChanges();
     }
@@ -49,6 +49,18 @@ public class SqliteProductRepository : IProductRepository
             return false;
         }
         _context.Products.Remove(product);
+        _context.SaveChanges();
+        return true;
+    }
+
+    public bool DeleteAll()
+    {
+        var product = GetAll();
+        if (product == null)
+        {
+            return false;
+        }
+        _context.Products.RemoveRange(product);
         _context.SaveChanges();
         return true;
     }

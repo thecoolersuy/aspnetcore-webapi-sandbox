@@ -42,4 +42,16 @@ public class InMemoryProductRepository : IProductRepository
         return true;
 
     }
+    public bool DeleteAll()
+    {
+        var product = GetAll();
+        if (product == null)
+        {
+            return false;
+        }
+        _products.Clear();
+        return true;
+
+    }
+
 }

@@ -85,6 +85,17 @@ public class ProductsController : ControllerBase
         return NoContent();
     }
 
+    [HttpDelete]
+    public IActionResult DeleteAll()
+    {
+        bool status = _repository.DeleteAll();
+        if (status == false)
+        {
+            return NotFound();
+        }
+        return NoContent();
+    }
+
 
 
 }
