@@ -1,5 +1,6 @@
 using AspNetCoreWebApiSandbox;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IProductRepository, SqliteProductRepository>();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 
 var app = builder.Build();
@@ -21,6 +23,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapControllers();
+app.UseExceptionHandler();
+
+
 
 var summaries = new[]
 {

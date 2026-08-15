@@ -9,48 +9,50 @@ public class InMemoryProductRepository : IProductRepository
         new Product{Id=3, Name="Nothing Phone", Price = 40000m},
     };
 
-    public List<Product> GetAll() => _products;
+    public Task<List<Product>> GetAllAsync() => Task.FromResult(_products.ToList());
 
-    public Product? GetById(int id) => _products.FirstOrDefault(p => p.Id == id);
+    public Task<Product?> GetByIdAsync(int id) => Task.FromResult(_products.FirstOrDefault(p => p.Id == id));
 
-    public void Add(Product product)
+    public Task AddAsync(Product product)
     {
         product.Id = _products.Count + 1;
         _products.Add(product);
+        return Task.CompletedTask;
+
     }
 
-    public bool Update(int id, Product updatedProduct)
+    public Task<bool> UpdateAsync(int id, Product updatedProduct)
     {
-        var product = GetById(id);
+        var product = _products.FirstOrDefault(p => p.Id == id);
         if (product == null)
         {
-            return false;
+            return Task.FromResult(false);
         }
         product.Name = updatedProduct.Name;
         product.Price = updatedProduct.Price;
-        return true;
+        return Task.FromResult(true);
     }
 
-    public bool Delete(int id)
+    public Task<bool> DeleteAsync(int id)
     {
-        var product = GetById(id);
+        var product = _products.FirstOrDefault(p => p.Id == id);
         if (product == null)
         {
-            return false;
+            return Task.FromResult(false);
         }
         _products.Remove(product);
-        return true;
+        return Task.FromResult(true);
 
     }
-    public bool DeleteAll()
+    public Task<bool> DeleteAllAsync()
     {
-        var product = GetAll();
+        var product = _products.ToList();
         if (product == null)
         {
-            return false;
+            return Task.FromResult(false);
         }
         _products.Clear();
-        return true;
+        return Task.FromResult(true);
 
     }
 
