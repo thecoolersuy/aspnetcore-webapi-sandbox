@@ -11,57 +11,57 @@ public class SqliteProductRepository : IProductRepository
         _context = context;
     }
 
-    public List<Product> GetAll()
+    public async Task<List<Product>> GetAllAsync()
     {
-        return _context.Products.ToList();
+        return await _context.Products.ToListAsync();
     }
 
-    public Product? GetById(int id)
+    public async Task<Product?> GetByIdAsync(int id)
     {
-        return _context.Products.FirstOrDefault(p => p.Id == id);
+        return await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public void Add(Product newProduct)
+    public async Task AddAsync(Product newProduct)
     {
 
         _context.Products.Add(newProduct);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
-    public bool Update(int id, Product updatedProduct)
+    public async Task<bool> UpdateAsync(int id, Product updatedProduct)
     {
-        var product = GetById(id);
+        var product = await GetByIdAsync(id);
         if (product == null)
         {
             return false;
         }
         product.Name = updatedProduct.Name;
         product.Price = updatedProduct.Price;
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
         return true;
     }
 
-    public bool Delete(int id)
+    public async Task<bool> DeleteAsync(int id)
     {
-        var product = GetById(id);
+        var product = await GetByIdAsync(id);
         if (product == null)
         {
             return false;
         }
         _context.Products.Remove(product);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
         return true;
     }
 
-    public bool DeleteAll()
+    public async Task<bool> DeleteAllAsync()
     {
-        var product = GetAll();
+        var product = await GetAllAsync();
         if (product == null)
         {
             return false;
         }
         _context.Products.RemoveRange(product);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
         return true;
     }
 }

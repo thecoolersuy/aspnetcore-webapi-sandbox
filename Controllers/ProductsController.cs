@@ -15,9 +15,9 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAllProducts()
+    public async Task<IActionResult> GetAllProducts()
     {
-        var products = _repository.GetAll();
+        var products = await _repository.GetAllAsync();
         var responseData = products.Select(p => new ProductResponseDto
         {
             Name = p.Name,
@@ -28,9 +28,9 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetProductById(int id)
+    public async Task<IActionResult> GetProductById(int id)
     {
-        var product = _repository.GetById(id);
+        var product = await _repository.GetByIdAsync(id);
         if (product == null) return NotFound();
 
         var responseData = new ProductResponseDto
@@ -43,7 +43,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreateProduct([FromBody] CreateProductDto newProduct)
+    public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto newProduct)
     {
         var product = new Product
         {
@@ -51,19 +51,19 @@ public class ProductsController : ControllerBase
             Price = newProduct.Price
 
         };
-        _repository.Add(product);
+        await _repository.AddAsync(product);
         return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, newProduct);
     }
 
     [HttpPut("{id}")]
-    public IActionResult UpdateProduct(int id, [FromBody] UpdateProductDto updatedProduct)
+    public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductDto updatedProduct)
     {
         var product = new Product
         {
             Name = updatedProduct.Name,
             Price = updatedProduct.Price
         };
-        bool status = _repository.Update(id, product);
+        bool status = await _repository.UpdateAsync(id, product);
         if (status == false)
         {
             return NotFound();
@@ -75,9 +75,9 @@ public class ProductsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public IActionResult DeleteProduct(int id)
+    public async Task<IActionResult> DeleteProduct(int id)
     {
-        bool status = _repository.Delete(id);
+        bool status = await _repository.DeleteAsync(id);
         if (status == false)
         {
             return NotFound();
@@ -86,9 +86,9 @@ public class ProductsController : ControllerBase
     }
 
     [HttpDelete]
-    public IActionResult DeleteAll()
+    public async Task<IActionResult> DeleteAll()
     {
-        bool status = _repository.DeleteAll();
+        bool status = await _repository.DeleteAllAsync();
         if (status == false)
         {
             return NotFound();

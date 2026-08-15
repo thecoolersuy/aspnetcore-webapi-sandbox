@@ -2,10 +2,10 @@ namespace AspNetCoreWebApiSandbox;
 
 public interface IProductRepository
 {
-    List<Product> GetAll();
-    Product? GetById(int id);
-    void Add(Product newProduct);
-    bool Update(int id, Product updatedProduct);
-    bool Delete(int id);
-    bool DeleteAll();
+    Task<List<Product>> GetAllAsync();
+    Task<Product?> GetByIdAsync(int id);
+    Task AddAsync(Product newProduct);
+    Task<bool> UpdateAsync(int id, Product updatedProduct);
+    Task<bool> DeleteAsync(int id);
+    Task<bool> DeleteAllAsync();
 }
