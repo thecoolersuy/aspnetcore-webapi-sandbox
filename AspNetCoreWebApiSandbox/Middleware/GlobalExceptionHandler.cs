@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
+
 
 namespace AspNetCoreWebApiSandbox;
 
@@ -22,7 +22,7 @@ public class GlobalExceptionHandler : IExceptionHandler
 
         httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-        await httpContext.Response.WriteAsJsonAsync(new 
+        await httpContext.Response.WriteAsJsonAsync(new
         {
             error = "An unexpected error occured.Please try again later."
         }, cancellationToken);

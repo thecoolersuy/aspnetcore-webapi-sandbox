@@ -11,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IProductRepository, SqliteProductRepository>();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 
 var app = builder.Build();
