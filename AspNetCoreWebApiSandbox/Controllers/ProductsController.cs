@@ -52,7 +52,13 @@ public class ProductsController : ControllerBase
 
         };
         await _repository.AddAsync(product);
-        return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, newProduct);
+
+        var responseData = new ProductResponseDto
+        {
+            Name = product.Name,
+            Price = product.Price
+        };
+        return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, responseData);
     }
 
     [HttpPut("{id}")]
